@@ -6,6 +6,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<script type="text/javascript">
+			$(function() {
+				$("#gender option[value='${searchCondition.gender}']").prop("selected", true);
+			});
+		</script>
 	</head>
 	<body>
 		<!--导航 begin -->
@@ -58,7 +63,11 @@
 					<form action="${ctx}/student?method=searchByCondition" method="post">
 						姓名：<input type="text" name="name" value="${searchCondition.name}"/>
 						年龄：<input type="text" name="age" value="${searchCondition.age}"/>
-						性别：<input type="text" name="gender" value="${searchCondition.gender}"/>
+						性别：<select id="gender" name="gender">
+							  	<option value="">不限</option>
+							  	<option value="男">男</option>
+							  	<option value="女">女</option>
+							  </select>
 						<input type="submit" value="搜索"/>
 					</form>
 					<!-- 搜索表单end -->

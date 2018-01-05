@@ -129,6 +129,7 @@ public class StudentMainServlet extends BaseServlet {
 		List<Student> list = studentService.searchByCondition(studentSearchCondition);
 		//3.将数据封装到域对象中，转发到student_list.jsp页面展示数据
 		req.setAttribute("list", list);
+		//在界面回显搜索条件
 		req.setAttribute("searchCondition", studentSearchCondition);
 		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);
 	}

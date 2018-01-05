@@ -249,7 +249,6 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public List<Student> searchByCondition(StudentSearchCondition studentSearchCondition) {
-
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -258,19 +257,23 @@ public class StudentDaoImpl implements IStudentDao {
 		List<String> conditionList = new ArrayList<String>();
 		try {
 			connection = JDBCUtil.getConnection();
-			if (studentSearchCondition.getName() != null && !"".equals(studentSearchCondition.getName())) {
+			//String sql = "select * from student where name like ? and age=? and gender=?";
+			if (studentSearchCondition.getName() != null 
+					&& !"".equals(studentSearchCondition.getName())) {
 				sql += " and name like ? ";
 				conditionList.add("%" + studentSearchCondition.getName() + "%");
 			}
-			if (studentSearchCondition.getAge() != null && !"".equals(studentSearchCondition.getAge())) {
+			if (studentSearchCondition.getAge() != null 
+					&& !"".equals(studentSearchCondition.getAge())) {
 				sql += " and age = ? ";
 				conditionList.add(studentSearchCondition.getAge());
 			}
-			if (studentSearchCondition.getGender() != null && !"".equals(studentSearchCondition.getGender())) {
+			if (studentSearchCondition.getGender() != null 
+					&& !"".equals(studentSearchCondition.getGender())) {
 				sql += " and gender = ? ";
 				conditionList.add(studentSearchCondition.getGender());
 			}
-
+			//sql语句拼接好
 			preparedStatement = connection.prepareStatement(sql);
 			//给占位符?赋值
 			for (int i = 0; i < conditionList.size(); i++) {
@@ -278,6 +281,7 @@ public class StudentDaoImpl implements IStudentDao {
 			}
 
 			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
 			while (resultSet.next()) {
 				Integer id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
