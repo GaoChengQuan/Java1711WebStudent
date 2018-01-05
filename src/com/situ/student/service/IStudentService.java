@@ -3,6 +3,7 @@ package com.situ.student.service;
 import java.util.List;
 
 import com.situ.student.entity.Student;
+import com.situ.student.vo.StudentSearchCondition;
 
 public interface IStudentService {
 
@@ -26,5 +27,7 @@ public interface IStudentService {
 	Student findById(int id);
 
 	boolean update(Student student);
+
+	List<Student> searchByCondition(StudentSearchCondition studentSearchCondition);
 
 }

@@ -12,6 +12,7 @@ import com.situ.student.dao.IStudentDao;
 import com.situ.student.entity.Banji;
 import com.situ.student.entity.Student;
 import com.situ.student.util.JDBCUtil;
+import com.situ.student.vo.StudentSearchCondition;
 
 public class StudentDaoImpl implements IStudentDao {
 
@@ -72,7 +73,7 @@ public class StudentDaoImpl implements IStudentDao {
 		}
 
 		return count;
-	
+
 	}
 
 	@Override
@@ -81,8 +82,7 @@ public class StudentDaoImpl implements IStudentDao {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		String sql = "SELECT id,NAME,age,gender,address,birthday,addTime "
-				+ "FROM student where id=?;";
+		String sql = "SELECT id,NAME,age,gender,address,birthday,addTime " + "FROM student where id=?;";
 		try {
 			connection = JDBCUtil.getConnection();
 			preparedStatement = connection.prepareStatement(sql);
@@ -105,7 +105,7 @@ public class StudentDaoImpl implements IStudentDao {
 		} finally {
 			JDBCUtil.close(connection, preparedStatement, resultSet);
 		}
-		
+
 		return null;
 	}
 
@@ -245,5 +245,54 @@ public class StudentDaoImpl implements IStudentDao {
 		}
 
 		return count;
+	}
+
+	@Override
+	public List<Student> searchByCondition(StudentSearchCondition studentSearchCondition) {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		List<Student> list = new ArrayList<Student>();
+		String sql = "SELECT id,NAME,age,gender,address,birthday,addTime FROM student where 1=1 ";
+		List<String> conditionList = new ArrayList<String>();
+		try {
+			connection = JDBCUtil.getConnection();
+			if (studentSearchCondition.getName() != null && !"".equals(studentSearchCondition.getName())) {
+				sql += " and name like ? ";
+				conditionList.add("%" + studentSearchCondition.getName() + "%");
+			}
+			if (studentSearchCondition.getAge() != null && !"".equals(studentSearchCondition.getAge())) {
+				sql += " and age = ? ";
+				conditionList.add(studentSearchCondition.getAge());
+			}
+			if (studentSearchCondition.getGender() != null && !"".equals(studentSearchCondition.getGender())) {
+				sql += " and gender = ? ";
+				conditionList.add(studentSearchCondition.getGender());
+			}
+
+			preparedStatement = connection.prepareStatement(sql);
+			//给占位符?赋值
+			for (int i = 0; i < conditionList.size(); i++) {
+				preparedStatement.setObject(i + 1, conditionList.get(i));
+			}
+
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Integer id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				Integer age = resultSet.getInt("age");
+				String address = resultSet.getString("address");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");// java.sql.Date
+				Date addTime = resultSet.getDate("addTime");// java.sql.Date
+				Student student = new Student(id, name, age, gender, address, addTime, birthday);
+				list.add(student);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return list;
 	}
 }

@@ -7,6 +7,7 @@ import com.situ.student.dao.impl.StudentDaoImpl;
 import com.situ.student.entity.Student;
 import com.situ.student.service.IStudentService;
 import com.situ.student.util.Constant;
+import com.situ.student.vo.StudentSearchCondition;
 
 public class StudentServiceImpl implements IStudentService {
 	private IStudentDao studentDao = new StudentDaoImpl();
@@ -80,6 +81,11 @@ public class StudentServiceImpl implements IStudentService {
 		} 
 		
 		return false;
+	}
+
+	@Override
+	public List<Student> searchByCondition(StudentSearchCondition studentSearchCondition) {
+		return studentDao.searchByCondition(studentSearchCondition);
 	}
 
 }

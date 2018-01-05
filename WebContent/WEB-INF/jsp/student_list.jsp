@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../common/base.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/lib/bootstrap/css/bootstrap.min.css"/>
 	</head>
 	<body>
 		<!--导航 begin -->
@@ -49,12 +48,20 @@
 					  <a href="#" class="list-group-item active">
 					    学生列表
 					  </a>
-					  <a href="${pageContext.request.contextPath}/student?method=getStudentAdd" class="list-group-item">学生添加</a>
+					  <a href="${ctx}/student?method=getStudentAdd" class="list-group-item">学生添加</a>
 					</div>
 				</div>
 				<!-- 左边部分 end-->
 				<!-- 右边部分 begin-->
 				<div class="col-md-10">
+					<!-- 搜索表单begin -->
+					<form action="${ctx}/student?method=searchByCondition" method="post">
+						姓名：<input type="text" name="name" value="${searchCondition.name}"/>
+						年龄：<input type="text" name="age" value="${searchCondition.age}"/>
+						性别：<input type="text" name="gender" value="${searchCondition.gender}"/>
+						<input type="submit" value="搜索"/>
+					</form>
+					<!-- 搜索表单end -->
 					<table class="table table-hover">
 				      <thead>
 				        <tr>

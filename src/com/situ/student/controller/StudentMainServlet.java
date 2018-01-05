@@ -18,6 +18,7 @@ import com.situ.student.service.IStudentService;
 import com.situ.student.service.impl.StudentServiceImpl;
 import com.situ.student.util.Constant;
 import com.situ.student.util.JDBCUtil;
+import com.situ.student.vo.StudentSearchCondition;
 
 public class StudentMainServlet extends BaseServlet {
 	private IStudentService studentService = new StudentServiceImpl();
@@ -116,31 +117,19 @@ public class StudentMainServlet extends BaseServlet {
 		//req.getRequestDispatcher("/showInfo.do").forward(req, resp);
 		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);
 	}
-
-	private void showInfo(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		List<Student> list = (List<Student>) req.getAttribute("list");
-		resp.setContentType("text/html;charset=utf-8");
-		PrintWriter printWriter = resp.getWriter();
-		printWriter.println("<a href='/Java1711Web/add_student.html'>添加</a>");
-		printWriter.println("<table border='1' cellspacing='0'>");
-		printWriter.println("<tr>            ");
-		printWriter.println("	<th>编号</th>");
-		printWriter.println("	<th>姓名</th>");
-		printWriter.println("	<th>年龄</th>");
-		printWriter.println("	<th>性别</th>");
-		printWriter.println("	<th>地址</th>");
-		printWriter.println("</tr>           ");
-
-		for (Student student : list) {
-			printWriter.println("<tr>            ");
-			printWriter.println("	<td>" + student.getId() + "</td>   ");
-			printWriter.println("	<td>" + student.getName() + "</td>");
-			printWriter.println("	<td>" + student.getAge() + "</td>  ");
-			printWriter.println("	<td>" + student.getGender() + "</td>  ");
-			printWriter.println("	<td>" + student.getAddress() + "</td>");
-			printWriter.println("</tr>           ");
-		}
-
-		printWriter.println("</table>");
+	
+	private void searchByCondition(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("StudentMainServlet.searchByCondition()");
+		//1.接收并封装数据
+		String name = req.getParameter("name");
+		String age = req.getParameter("age");
+		String gender = req.getParameter("gender");
+		StudentSearchCondition studentSearchCondition = new StudentSearchCondition(name, age, gender);
+		//2.调用service层的业务逻辑
+		List<Student> list = studentService.searchByCondition(studentSearchCondition);
+		//3.将数据封装到域对象中，转发到student_list.jsp页面展示数据
+		req.setAttribute("list", list);
+		req.setAttribute("searchCondition", studentSearchCondition);
+		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);
 	}
 }
