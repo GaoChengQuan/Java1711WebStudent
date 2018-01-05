@@ -27,7 +27,16 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>StudentServlet</servlet-name>
-    <url-pattern>*.do</url-pattern>
+    <url-pattern>/student</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>BanjiServlet</servlet-name>
+    <servlet-class>com.situ.student.controller.BanjiMainServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BanjiServlet</servlet-name>
+    <url-pattern>/banji</url-pattern>
   </servlet-mapping>
   
   <servlet>

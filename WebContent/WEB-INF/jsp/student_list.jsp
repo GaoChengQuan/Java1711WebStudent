@@ -49,7 +49,7 @@
 					  <a href="#" class="list-group-item active">
 					    学生列表
 					  </a>
-					  <a href="${pageContext.request.contextPath}/getStudentAdd.do" class="list-group-item">学生添加</a>
+					  <a href="${pageContext.request.contextPath}/student?method=getStudentAdd" class="list-group-item">学生添加</a>
 					</div>
 				</div>
 				<!-- 左边部分 end-->
