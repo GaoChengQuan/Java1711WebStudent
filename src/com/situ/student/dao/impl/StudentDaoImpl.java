@@ -349,4 +349,108 @@ public class StudentDaoImpl implements IStudentDao {
 		}
 		return count;
 	}
+
+	@Override
+	public int getTotalCount(StudentSearchCondition studentSearchCondition) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String sql = "select count(*) from student where 1=1 ";
+		int count = 0;
+		List<String> conditionList = new ArrayList<String>();
+		try {
+			connection = JDBCUtil.getConnection();
+			if (studentSearchCondition.getName() != null 
+					&& !"".equals(studentSearchCondition.getName())) {
+				sql += " and name like ? ";
+				conditionList.add("%" + studentSearchCondition.getName() + "%");
+			}
+			if (studentSearchCondition.getAge() != null 
+					&& !"".equals(studentSearchCondition.getAge())) {
+				sql += " and age = ? ";
+				conditionList.add(studentSearchCondition.getAge());
+			}
+			if (studentSearchCondition.getGender() != null 
+					&& !"".equals(studentSearchCondition.getGender())) {
+				sql += " and gender = ? ";
+				conditionList.add(studentSearchCondition.getGender());
+			}
+			//sql语句拼接好
+			preparedStatement = connection.prepareStatement(sql);
+			//给占位符?赋值
+			for (int i = 0; i < conditionList.size(); i++) {
+				preparedStatement.setObject(i + 1, conditionList.get(i));
+			}
+			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			if (resultSet.next()) {
+				count = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement, resultSet);
+		}
+		return count;
+	}
+
+	@Override
+	public List<Student> findPageBeanList(StudentSearchCondition studentSearchCondition) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String sql = "SELECT id,NAME,age,gender,address,birthday FROM student where 1=1 ";
+		List<Student> list = new ArrayList<Student>();
+		List<String> conditionList = new ArrayList<String>();
+		try {
+			connection = JDBCUtil.getConnection();
+			if (studentSearchCondition.getName() != null 
+					&& !"".equals(studentSearchCondition.getName())) {
+				sql += " and name like ? ";
+				conditionList.add("%" + studentSearchCondition.getName() + "%");
+			}
+			if (studentSearchCondition.getAge() != null 
+					&& !"".equals(studentSearchCondition.getAge())) {
+				sql += " and age = ? ";
+				conditionList.add(studentSearchCondition.getAge());
+			}
+			if (studentSearchCondition.getGender() != null 
+					&& !"".equals(studentSearchCondition.getGender())) {
+				sql += " and gender = ? ";
+				conditionList.add(studentSearchCondition.getGender());
+			}
+			
+			sql += " limit ?,?";
+			
+			//sql语句拼接好
+			preparedStatement = connection.prepareStatement(sql);
+			//给占位符?赋值
+			for (int i = 0; i < conditionList.size(); i++) {
+				preparedStatement.setObject(i + 1, conditionList.get(i));
+			}
+			
+			int offset = (studentSearchCondition.getPageNo() - 1) * studentSearchCondition.getPageSize();
+			preparedStatement.setInt(conditionList.size() + 1, offset);
+			preparedStatement.setInt(conditionList.size() + 2, studentSearchCondition.getPageSize());
+			
+			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			while (resultSet.next()) {
+				Integer id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				Integer age = resultSet.getInt("age");
+				String address = resultSet.getString("address");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");// java.sql.Date
+				Student student = new Student(id, name, age, gender, address, birthday);
+				list.add(student);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement, resultSet);
+		}
+		return list;
+	
+	}
 }

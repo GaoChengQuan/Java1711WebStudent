@@ -1,6 +1,10 @@
 package com.situ.student.vo;
 
 public class StudentSearchCondition {
+	// 当前是第几页
+	private Integer pageNo;
+	// 一页有多少条数据
+	private Integer pageSize;
 	private String name;
 	private String age;
 	private String gender;
@@ -9,8 +13,10 @@ public class StudentSearchCondition {
 		super();
 	}
 
-	public StudentSearchCondition(String name, String age, String gender) {
+	public StudentSearchCondition(Integer pageNo, Integer pageSize, String name, String age, String gender) {
 		super();
+		this.pageNo = pageNo;
+		this.pageSize = pageSize;
 		this.name = name;
 		this.age = age;
 		this.gender = gender;
@@ -40,9 +46,26 @@ public class StudentSearchCondition {
 		this.gender = gender;
 	}
 
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
 	@Override
 	public String toString() {
-		return "StudentSearchCondition [name=" + name + ", age=" + age + ", gender=" + gender + "]";
+		return "StudentSearchCondition [pageNo=" + pageNo + ", pageSize=" + pageSize + ", name=" + name + ", age=" + age
+				+ ", gender=" + gender + "]";
 	}
 
 }

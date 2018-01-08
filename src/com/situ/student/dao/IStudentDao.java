@@ -42,4 +42,8 @@ public interface IStudentDao {
 	public abstract List<Student> findPageBeanList(int offset, int pageSize);
 
 	public abstract int getTotalCount();
+
+	public abstract int getTotalCount(StudentSearchCondition studentSearchCondition);
+
+	public abstract List<Student> findPageBeanList(StudentSearchCondition studentSearchCondition);
 }

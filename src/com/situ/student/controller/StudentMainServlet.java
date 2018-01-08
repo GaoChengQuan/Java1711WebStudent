@@ -142,14 +142,24 @@ public class StudentMainServlet extends BaseServlet {
 	private void searchByCondition(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("StudentMainServlet.searchByCondition()");
 		//1.接收并封装数据
+		String pageNoStr = req.getParameter("pageNo");
+		String pageSizeStr = req.getParameter("pageSize");
+		int pageNo = 1;//默认取第一页的数据
+		if (pageNoStr != null && !"".equals(pageNoStr)) {
+			pageNo = Integer.parseInt(pageNoStr);
+		}
+		int pageSize = 3;//默认每一页条数
+		if (pageSizeStr != null && !"".equals(pageSizeStr)) {
+			pageSize = Integer.parseInt(pageSizeStr);
+		}
 		String name = req.getParameter("name");
 		String age = req.getParameter("age");
 		String gender = req.getParameter("gender");
-		StudentSearchCondition studentSearchCondition = new StudentSearchCondition(name, age, gender);
+		StudentSearchCondition studentSearchCondition = new StudentSearchCondition(pageNo, pageSize, name, age, gender);
 		//2.调用service层的业务逻辑
-		List<Student> list = studentService.searchByCondition(studentSearchCondition);
+		PageBean pageBean = studentService.searchByCondition(studentSearchCondition);
 		//3.将数据封装到域对象中，转发到student_list.jsp页面展示数据
-		req.setAttribute("list", list);
+		req.setAttribute("pageBean", pageBean);
 		//在界面回显搜索条件
 		req.setAttribute("searchCondition", studentSearchCondition);
 		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);

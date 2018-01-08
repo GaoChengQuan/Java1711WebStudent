@@ -29,7 +29,7 @@ public interface IStudentService {
 
 	boolean update(Student student);
 
-	List<Student> searchByCondition(StudentSearchCondition studentSearchCondition);
+	PageBean searchByCondition(StudentSearchCondition studentSearchCondition);
 
 	PageBean getPageBean(int pageNo, int pageSize);
 
