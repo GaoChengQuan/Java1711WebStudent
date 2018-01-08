@@ -87,32 +87,28 @@ public class StudentServiceImpl implements IStudentService {
 	}
 
 	@Override
-	public PageBean searchByCondition(StudentSearchCondition studentSearchCondition) {
-		PageBean pageBean = new PageBean();
-		int pageNo = studentSearchCondition.getPageNo();
-		int pageSize = studentSearchCondition.getPageSize();
-		// 当前是第几页 private Integer pageNo;
-		pageBean.setPageNo(pageNo);
-		// 一页有多少条数据 private Integer pageSize;
-		pageBean.setPageSize(pageSize);
-		// 总记录数 private Integer totalCount;
-		int totalCount = studentDao.getTotalCount(studentSearchCondition);
-		// 一共有多少页 private Integer totalPage;
-		/**
-		 * 总条数	每页的条数  	 总页数
-		 * 10			3		 4
-		 * 11			3		 4
-		 * 12			3		 4
-		 * 13			3		 5
-		 */
-		int totalPage = (int) Math.ceil((double)totalCount / pageSize);
-		pageBean.setTotalPage(totalPage);
-		// 当前页的数据 private List<Student> list;
-		List<Student> list = studentDao.findPageBeanList(studentSearchCondition);
-		pageBean.setList(list);
-		
-		return pageBean;
-	}
+public PageBean searchByCondition(StudentSearchCondition studentSearchCondition) {
+	PageBean pageBean = new PageBean();
+	int pageNo = studentSearchCondition.getPageNo();
+	int pageSize = studentSearchCondition.getPageSize();
+	// 当前是第几页 private Integer pageNo;
+	pageBean.setPageNo(pageNo);
+	// 一页有多少条数据 private Integer pageSize;
+	pageBean.setPageSize(pageSize);
+	// 总记录数 private Integer totalCount;
+	// SELECT COUNT(*) FROM student;
+	// SELECT COUNT(*) FROM student WHERE NAME LIKE '%张%' AND age=20;
+	int totalCount = studentDao.getTotalCount(studentSearchCondition);
+	// 一共有多少页 private Integer totalPage;
+	int totalPage = (int) Math.ceil((double)totalCount / pageSize);
+	pageBean.setTotalPage(totalPage);
+	// 当前页的数据 private List<Student> list;
+	//SELECT * FROM student LIMIT 3,3;
+	//SELECT * FROM student WHERE NAME LIKE '%张%' AND age=20 LIMIT 3,3;
+	List<Student> list = studentDao.findPageBeanList(studentSearchCondition);
+	pageBean.setList(list);
+	return pageBean;
+}
 
 	@Override
 	public PageBean getPageBean(int pageNo, int pageSize) {

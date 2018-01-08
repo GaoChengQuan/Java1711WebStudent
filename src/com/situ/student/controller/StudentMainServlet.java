@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.situ.student.entity.Banji;
 import com.situ.student.entity.Student;
 import com.situ.student.service.IStudentService;
 import com.situ.student.service.impl.StudentServiceImpl;
@@ -157,7 +158,7 @@ public class StudentMainServlet extends BaseServlet {
 		String gender = req.getParameter("gender");
 		StudentSearchCondition studentSearchCondition = new StudentSearchCondition(pageNo, pageSize, name, age, gender);
 		//2.调用service层的业务逻辑
-		PageBean pageBean = studentService.searchByCondition(studentSearchCondition);
+		PageBean<Student> pageBean = studentService.searchByCondition(studentSearchCondition);
 		//3.将数据封装到域对象中，转发到student_list.jsp页面展示数据
 		req.setAttribute("pageBean", pageBean);
 		//在界面回显搜索条件

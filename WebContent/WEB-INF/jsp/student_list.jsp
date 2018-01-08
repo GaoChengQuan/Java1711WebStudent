@@ -10,6 +10,11 @@
 			$(function() {
 				$("#gender option[value='${searchCondition.gender}']").prop("selected", true);
 			});
+			
+			function goPage(pageNo) {
+				$("#pageNo").val(pageNo);
+				$("#searchForm").submit();
+			}
 		</script>
 	</head>
 	<body>
@@ -60,7 +65,8 @@
 				<!-- 右边部分 begin-->
 				<div class="col-md-10">
 					<!-- 搜索表单begin -->
-					<form action="${ctx}/student?method=searchByCondition" method="post">
+					<form action="${ctx}/student?method=searchByCondition" method="post" id="searchForm">
+						<input type="hidden" name="pageNo" id="pageNo"><br/>
 						姓名：<input type="text" name="name" value="${searchCondition.name}"/>
 						年龄：<input type="text" name="age" value="${searchCondition.age}"/>
 						性别：<select id="gender" name="gender">
@@ -110,7 +116,7 @@
 					  	</c:if>
 					  	<c:if test="${pageBean.pageNo!=1}">
 						    <li>
-						      <a href="${ctx}/student?method=pageList&pageNo=${pageBean.pageNo-1}&pageSize=3" aria-label="Previous">
+						      <a href="javascript:goPage('${pageBean.pageNo-1}')" aria-label="Previous">
 						        <span aria-hidden="true">&laquo;</span>
 						      </a>
 						    </li>
@@ -119,11 +125,11 @@
 					    
 					    <c:forEach begin="1" end="${pageBean.totalPage}" var="page">
 					    	<c:if test="${pageBean.pageNo!=page}">
-						   		 <li><a href="${ctx}/student?method=pageList&pageNo=${page}&pageSize=3">${page}</a></li>
+						   		 <li><a href="javascript:goPage('${page}')">${page}</a></li>
 					    	</c:if>
 						    <!-- 遍历的时候page和pageNo相等，高亮显示  -->
 						    <c:if test="${pageBean.pageNo==page}">
-						    	<li class="active"><a href="${ctx}/student?method=pageList&pageNo=${page}&pageSize=3">${page}</a></li>
+						    	<li class="active"><a href="javascript:void(0)">${page}</a></li>
 						    </c:if>
 					    </c:forEach>
 					    

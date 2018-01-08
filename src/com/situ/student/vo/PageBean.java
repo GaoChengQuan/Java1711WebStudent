@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.situ.student.entity.Student;
 
-public class PageBean {
+public class PageBean<T> {
 	// 当前是第几页
 	private Integer pageNo;
 	// 一页有多少条数据
@@ -14,7 +14,7 @@ public class PageBean {
 	// 一共有多少页
 	private Integer totalPage;
 	// 当前页的数据
-	private List<Student> list;
+	private List<T> list;
 
 	public Integer getPageNo() {
 		return pageNo;
@@ -48,11 +48,11 @@ public class PageBean {
 		this.totalPage = totalPage;
 	}
 
-	public List<Student> getList() {
+	public List<T> getList() {
 		return list;
 	}
 
-	public void setList(List<Student> list) {
+	public void setList(List<T> list) {
 		this.list = list;
 	}
 
