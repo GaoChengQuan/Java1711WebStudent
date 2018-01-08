@@ -18,6 +18,7 @@ import com.situ.student.service.IStudentService;
 import com.situ.student.service.impl.StudentServiceImpl;
 import com.situ.student.util.Constant;
 import com.situ.student.util.JDBCUtil;
+import com.situ.student.vo.PageBean;
 import com.situ.student.vo.StudentSearchCondition;
 
 public class StudentMainServlet extends BaseServlet {
@@ -115,6 +116,26 @@ public class StudentMainServlet extends BaseServlet {
 		/*RequestDispatcher requestDispatcher = req.getRequestDispatcher("");
 		requestDispatcher.forward(req, resp);*/
 		//req.getRequestDispatcher("/showInfo.do").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);
+	}
+	
+	private void pageList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		// 1.接收请求参数，封装成对象
+		String pageNoStr = req.getParameter("pageNo");
+		String pageSizeStr = req.getParameter("pageSize");
+		int pageNo = 1;//默认取第一页的数据
+		if (pageNoStr != null && !"".equals(pageNoStr)) {
+			pageNo = Integer.parseInt(pageNoStr);
+		}
+		int pageSize = 3;//默认每一页条数
+		if (pageSizeStr != null && !"".equals(pageSizeStr)) {
+			pageSize = Integer.parseInt(pageSizeStr);
+		}
+		// 2.调业务层处理
+		PageBean pageBean = studentService.getPageBean(pageNo, pageSize);
+		System.out.println(pageBean);
+		// 3.控制界面的跳转
+		req.setAttribute("pageBean", pageBean);
 		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);
 	}
 	

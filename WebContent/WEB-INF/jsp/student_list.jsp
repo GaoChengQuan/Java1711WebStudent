@@ -82,7 +82,7 @@
 				        </tr>
 				      </thead>
 				      <tbody>
-				      	<c:forEach items="${list}" var="student">
+				      	<c:forEach items="${pageBean.list}" var="student">
 					        <tr>
 					          <td>${student.id}</td>
 					          <td>${student.name}</td>
@@ -93,6 +93,42 @@
 				      	</c:forEach>
 				      </tbody>
 				    </table>
+				    <nav aria-label="Page navigation">
+					  <ul class="pagination">
+					  	<!-- 上一页 begin -->
+					  	<c:if test="${pageBean.pageNo==1}">
+						    <li class="disabled">
+						      <a href="javascript:void(0)" aria-label="Previous">
+						        <span aria-hidden="true">&laquo;</span>
+						      </a>
+						    </li>
+					  	</c:if>
+					  	<c:if test="${pageBean.pageNo!=1}">
+						    <li>
+						      <a href="${ctx}/student?method=pageList&pageNo=${pageBean.pageNo-1}&pageSize=3" aria-label="Previous">
+						        <span aria-hidden="true">&laquo;</span>
+						      </a>
+						    </li>
+					  	</c:if>
+					  	<!-- 上一页 end -->
+					    
+					    <c:forEach begin="1" end="${pageBean.totalPage}" var="page">
+					    	<c:if test="${pageBean.pageNo!=page}">
+						   		 <li><a href="${ctx}/student?method=pageList&pageNo=${page}&pageSize=3">${page}</a></li>
+					    	</c:if>
+						    <!-- 遍历的时候page和pageNo相等，高亮显示  -->
+						    <c:if test="${pageBean.pageNo==page}">
+						    	<li class="active"><a href="${ctx}/student?method=pageList&pageNo=${page}&pageSize=3">${page}</a></li>
+						    </c:if>
+					    </c:forEach>
+					    
+					    <li>
+					      <a href="#" aria-label="Next">
+					        <span aria-hidden="true">&raquo;</span>
+					      </a>
+					    </li>
+					  </ul>
+					</nav>
 				</div>
 				<!-- 右边部分 end-->
 			</div>

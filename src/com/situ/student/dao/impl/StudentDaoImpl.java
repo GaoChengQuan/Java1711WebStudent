@@ -299,4 +299,60 @@ public class StudentDaoImpl implements IStudentDao {
 
 		return list;
 	}
+
+	@Override
+	public List<Student> findPageBeanList(int offset, int pageSize) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String sql = "SELECT id,NAME,age,gender,address,birthday,addTime FROM student limit ?,?;";
+		List<Student> list = new ArrayList<Student>();
+		try {
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, offset);
+			preparedStatement.setInt(2, pageSize);
+			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			while (resultSet.next()) {
+				Integer id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				Integer age = resultSet.getInt("age");
+				String address = resultSet.getString("address");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");// java.sql.Date
+				Date addTime = resultSet.getDate("addTime");// java.sql.Date
+				Student student = new Student(id, name, age, gender, address, addTime, birthday);
+				list.add(student);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement, resultSet);
+		}
+		return list;
+	}
+
+	@Override
+	public int getTotalCount() {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String sql = "select count(*) from student";
+		int count = 0;
+		try {
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			if (resultSet.next()) {
+				count = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement, resultSet);
+		}
+		return count;
+	}
 }

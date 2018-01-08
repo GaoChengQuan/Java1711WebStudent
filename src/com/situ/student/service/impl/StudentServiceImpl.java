@@ -2,11 +2,14 @@ package com.situ.student.service.impl;
 
 import java.util.List;
 
+import javax.naming.InitialContext;
+
 import com.situ.student.dao.IStudentDao;
 import com.situ.student.dao.impl.StudentDaoImpl;
 import com.situ.student.entity.Student;
 import com.situ.student.service.IStudentService;
 import com.situ.student.util.Constant;
+import com.situ.student.vo.PageBean;
 import com.situ.student.vo.StudentSearchCondition;
 
 public class StudentServiceImpl implements IStudentService {
@@ -87,5 +90,42 @@ public class StudentServiceImpl implements IStudentService {
 	public List<Student> searchByCondition(StudentSearchCondition studentSearchCondition) {
 		return studentDao.searchByCondition(studentSearchCondition);
 	}
+
+	@Override
+	public PageBean getPageBean(int pageNo, int pageSize) {
+		PageBean pageBean = new PageBean();
+		// 当前是第几页 private Integer pageNo;
+		pageBean.setPageNo(pageNo);
+		// 一页有多少条数据 private Integer pageSize;
+		pageBean.setPageSize(pageSize);
+		// 总记录数 private Integer totalCount;
+		int totalCount = studentDao.getTotalCount();
+		// 一共有多少页 private Integer totalPage;
+		/**
+		 * 总条数	每页的条数  	 总页数
+		 * 10			3		 4
+		 * 11			3		 4
+		 * 12			3		 4
+		 * 13			3		 5
+		 */
+		int totalPage = (int) Math.ceil((double)totalCount / pageSize);
+		pageBean.setTotalPage(totalPage);
+		// 当前页的数据 private List<Student> list;
+		int offset = (pageNo - 1) * pageSize;
+		List<Student> list = studentDao.findPageBeanList(offset, pageSize);
+		pageBean.setList(list);
+		
+		return pageBean;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

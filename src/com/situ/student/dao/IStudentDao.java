@@ -38,4 +38,8 @@ public interface IStudentDao {
 	public abstract int deleteById(int id);
 
 	public abstract List<Student> searchByCondition(StudentSearchCondition studentSearchCondition);
+
+	public abstract List<Student> findPageBeanList(int offset, int pageSize);
+
+	public abstract int getTotalCount();
 }

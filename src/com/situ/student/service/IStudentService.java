@@ -3,6 +3,7 @@ package com.situ.student.service;
 import java.util.List;
 
 import com.situ.student.entity.Student;
+import com.situ.student.vo.PageBean;
 import com.situ.student.vo.StudentSearchCondition;
 
 public interface IStudentService {
@@ -29,5 +30,7 @@ public interface IStudentService {
 	boolean update(Student student);
 
 	List<Student> searchByCondition(StudentSearchCondition studentSearchCondition);
+
+	PageBean getPageBean(int pageNo, int pageSize);
 
 }
