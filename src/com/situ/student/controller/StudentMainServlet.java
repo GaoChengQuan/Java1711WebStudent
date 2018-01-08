@@ -34,7 +34,7 @@ public class StudentMainServlet extends BaseServlet {
 		String age = req.getParameter("age");
 		String gender = req.getParameter("gender");
 		String address = req.getParameter("address");
-		Student student = new Student(Integer.parseInt(idStr), name, Integer.parseInt(age), gender, address, new Date(), new Date());
+		Student student = new Student(Integer.parseInt(idStr), name, Integer.parseInt(age), gender, address, new Date());
 		if (studentService.update(student)) {
 			System.out.println("更新成功");
 		} else {

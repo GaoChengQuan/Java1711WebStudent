@@ -20,7 +20,7 @@ public class StudentDaoImpl implements IStudentDao {
 	public int add(Student student) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-		String sql = "INSERT INTO student(NAME,age,gender,address,birthday,addTime) VALUES(?,?,?,?,?,?);";
+		String sql = "INSERT INTO student(NAME,age,gender,address,birthday) VALUES(?,?,?,?,?);";
 		try {
 			connection = JDBCUtil.getConnection();
 			preparedStatement = connection.prepareStatement(sql);
@@ -31,7 +31,6 @@ public class StudentDaoImpl implements IStudentDao {
 			// the number of milliseconds since January 1, 1970, 00:00:00 GMT
 			// represented by this date.
 			preparedStatement.setDate(5, new java.sql.Date(student.getBirthday().getTime()));
-			preparedStatement.setDate(6, new java.sql.Date(student.getAddTime().getTime()));
 			int result = preparedStatement.executeUpdate();
 			System.out.println(preparedStatement);
 			return result;
@@ -96,8 +95,7 @@ public class StudentDaoImpl implements IStudentDao {
 				String address = resultSet.getString("address");
 				String gender = resultSet.getString("gender");
 				Date birthday = resultSet.getDate("birthday");// java.sql.Date
-				Date addTime = resultSet.getDate("addTime");// java.sql.Date
-				Student student = new Student(id, name, age, gender, address, addTime, birthday);
+				Student student = new Student(id, name, age, gender, address, birthday);
 				return student;
 			}
 		} catch (SQLException e) {
@@ -128,8 +126,7 @@ public class StudentDaoImpl implements IStudentDao {
 				String address = resultSet.getString("address");
 				String gender = resultSet.getString("gender");
 				Date birthday = resultSet.getDate("birthday");// java.sql.Date
-				Date addTime = resultSet.getDate("addTime");// java.sql.Date
-				Student student = new Student(id, name, age, gender, address, addTime, birthday);
+				Student student = new Student(id, name, age, gender, address, birthday);
 				list.add(student);
 			}
 		} catch (SQLException e) {
@@ -184,8 +181,7 @@ public class StudentDaoImpl implements IStudentDao {
 				String address = resultSet.getString("address");
 				String gender = resultSet.getString("gender");
 				Date birthday = resultSet.getDate("birthday");// java.sql.Date
-				Date addTime = resultSet.getDate("addTime");// java.sql.Date
-				Student student = new Student(id, name, age, gender, address, addTime, birthday);
+				Student student = new Student(id, name, age, gender, address, birthday);
 				list.add(student);
 			}
 		} catch (SQLException e) {
@@ -215,7 +211,7 @@ public class StudentDaoImpl implements IStudentDao {
 				Integer banjiId = resultSet.getInt("b.id");
 				String banjiName = resultSet.getString("b.name");
 				Banji banji = new Banji(banjiId, banjiName);
-				Student student = new Student(id, name, age, null, null, null, null, banji);
+				Student student = new Student(id, name, age, null, null, null, banji);
 				list.add(student);
 			}
 		} catch (SQLException e) {
@@ -253,7 +249,7 @@ public class StudentDaoImpl implements IStudentDao {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		List<Student> list = new ArrayList<Student>();
-		String sql = "SELECT id,NAME,age,gender,address,birthday,addTime FROM student where 1=1 ";
+		String sql = "SELECT id,NAME,age,gender,address,birthday FROM student where 1=1 ";
 		List<String> conditionList = new ArrayList<String>();
 		try {
 			connection = JDBCUtil.getConnection();
@@ -289,8 +285,7 @@ public class StudentDaoImpl implements IStudentDao {
 				String address = resultSet.getString("address");
 				String gender = resultSet.getString("gender");
 				Date birthday = resultSet.getDate("birthday");// java.sql.Date
-				Date addTime = resultSet.getDate("addTime");// java.sql.Date
-				Student student = new Student(id, name, age, gender, address, addTime, birthday);
+				Student student = new Student(id, name, age, gender, address, birthday);
 				list.add(student);
 			}
 		} catch (SQLException e) {
@@ -305,7 +300,7 @@ public class StudentDaoImpl implements IStudentDao {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		String sql = "SELECT id,NAME,age,gender,address,birthday,addTime FROM student limit ?,?;";
+		String sql = "SELECT id,NAME,age,gender,address,birthday FROM student limit ?,?;";
 		List<Student> list = new ArrayList<Student>();
 		try {
 			connection = JDBCUtil.getConnection();
@@ -321,8 +316,7 @@ public class StudentDaoImpl implements IStudentDao {
 				String address = resultSet.getString("address");
 				String gender = resultSet.getString("gender");
 				Date birthday = resultSet.getDate("birthday");// java.sql.Date
-				Date addTime = resultSet.getDate("addTime");// java.sql.Date
-				Student student = new Student(id, name, age, gender, address, addTime, birthday);
+				Student student = new Student(id, name, age, gender, address, birthday);
 				list.add(student);
 			}
 		} catch (SQLException e) {

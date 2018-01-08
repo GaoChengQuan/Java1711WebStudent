@@ -79,6 +79,8 @@
 				          <th>年龄</th>
 				          <th>性别</th>
 				          <th>地址</th>
+				          <th>删除</th>
+				          <th>修改</th>
 				        </tr>
 				      </thead>
 				      <tbody>
@@ -89,10 +91,13 @@
 					          <td>${student.age}</td>
 					          <td>${student.gender}</td>
 					          <td>${student.address}</td>
+					          <td><a href="${ctx}/student?deleteById&id=${student.id}">删除</a></td>
+					          <td><a href="${ctx}/student?toUpdate&id=${student.id}">修改</a></td>
 					        </tr>
 				      	</c:forEach>
 				      </tbody>
 				    </table>
+				    <!-- 分页begin -->
 				    <nav aria-label="Page navigation">
 					  <ul class="pagination">
 					  	<!-- 上一页 begin -->
@@ -129,6 +134,7 @@
 					    </li>
 					  </ul>
 					</nav>
+					<!-- 分页end -->
 				</div>
 				<!-- 右边部分 end-->
 			</div>
