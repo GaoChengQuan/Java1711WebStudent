@@ -8,33 +8,38 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-
 import com.situ.student.dao.IStudentDao;
 import com.situ.student.entity.Banji;
 import com.situ.student.entity.Student;
-import com.situ.student.util.C3P0Util;
 import com.situ.student.util.JDBCUtil;
 import com.situ.student.vo.StudentSearchCondition;
 
-public class StudentDaoImpl implements IStudentDao {
-	private QueryRunner queryRunner = new QueryRunner(C3P0Util.getDataSource());
+public class StudentDaoImpl2 implements IStudentDao {
 
 	@Override
 	public int add(Student student) {
-		int count = 0;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		String sql = "INSERT INTO student(NAME,age,gender,address,birthday) VALUES(?,?,?,?,?);";
 		try {
-			String sql = "INSERT INTO student(NAME,age,gender,address,birthday) VALUES(?,?,?,?,?);";
-			Object[] params = { student.getName(), student.getAge(), student.getGender(), student.getAddress(),
-					student.getBirthday() };
-			count = queryRunner.update(sql, params);
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, student.getName());
+			preparedStatement.setInt(2, student.getAge());
+			preparedStatement.setString(3, student.getGender());
+			preparedStatement.setString(4, student.getAddress());
+			// the number of milliseconds since January 1, 1970, 00:00:00 GMT
+			// represented by this date.
+			preparedStatement.setDate(5, new java.sql.Date(student.getBirthday().getTime()));
+			int result = preparedStatement.executeUpdate();
+			System.out.println(preparedStatement);
+			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement);
 		}
-		
-		return count;
+		return 0;
 	}
 
 	@Override
@@ -45,27 +50,58 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public int update(Student student) {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		int count = 0;
+		String sql = "UPDATE student SET name=?,age=?,gender=?,address=? WHERE id=?;";
 		try {
-			String sql = "UPDATE student SET name=?,age=?,gender=?,address=? WHERE id=?;";
-			Object[] params = { student.getName(), student.getAge(), student.getGender(), student.getAddress(),
-					student.getId()};
-			count = queryRunner.update(sql, params);
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, student.getName());
+			preparedStatement.setInt(2, student.getAge());
+			preparedStatement.setString(3, student.getGender());
+			preparedStatement.setString(4, student.getAddress());
+			preparedStatement.setInt(5, student.getId());
+			count = preparedStatement.executeUpdate();
+			System.out.println(preparedStatement);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement);
 		}
-		
+
 		return count;
+
 	}
 
 	@Override
 	public Student findById(Integer searchId) {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String sql = "SELECT id,NAME,age,gender,address,birthday,addTime " + "FROM student where id=?;";
 		try {
-			String sql = "SELECT id,NAME,age,gender,address,birthday,addTime " + "FROM student where id=?;";
-			Object[] params = {searchId};
-			return queryRunner.query(sql, new BeanHandler<Student>(Student.class), params);
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, searchId);
+			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			if (resultSet.next()) {
+				Integer id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				Integer age = resultSet.getInt("age");
+				String address = resultSet.getString("address");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");// java.sql.Date
+				Student student = new Student(id, name, age, gender, address, birthday);
+				return student;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement, resultSet);
 		}
 
 		return null;
@@ -73,33 +109,55 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public List<Student> findAll() {
-		List<Student> list = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String sql = "SELECT id,NAME,age,gender,address,birthday,addTime FROM student;";
+		List<Student> list = new ArrayList<Student>();
 		try {
-			String sql = "SELECT id,NAME,age,gender,address,birthday,addTime FROM student;";
-			list = queryRunner.query(sql, new BeanListHandler<Student>(Student.class));
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			while (resultSet.next()) {
+				Integer id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				Integer age = resultSet.getInt("age");
+				String address = resultSet.getString("address");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");// java.sql.Date
+				Student student = new Student(id, name, age, gender, address, birthday);
+				list.add(student);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement, resultSet);
 		}
-		
 		return list;
 	}
 
 	@Override
 	public boolean checkName(String name) {
-		Student student = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String sql = "SELECT NAME FROM student WHERE NAME=?;";
 		try {
-			String sql = "SELECT NAME FROM student WHERE NAME=?;";
-			Object[] params = {name};
-			student = queryRunner.query(sql, new BeanHandler<Student>(Student.class), name);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, name);
+			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			if (resultSet.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement, resultSet);
 		}
-
-		if (student != null) {
-			return true; 
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	@Override
@@ -338,35 +396,61 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public List<Student> findPageBeanList(StudentSearchCondition studentSearchCondition) {
-		System.out.println("StudentDaoImpl.findPageBeanList()");
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		String sql = "SELECT id,NAME,age,gender,address,birthday FROM student where 1=1 ";
-		List conditionList = new ArrayList();
-		if (studentSearchCondition.getName() != null && !"".equals(studentSearchCondition.getName())) {
-			sql += " and name like ? ";
-			conditionList.add("%" + studentSearchCondition.getName() + "%");
-		}
-		if (studentSearchCondition.getAge() != null && !"".equals(studentSearchCondition.getAge())) {
-			sql += " and age = ? ";
-			conditionList.add(studentSearchCondition.getAge());
-		}
-		if (studentSearchCondition.getGender() != null && !"".equals(studentSearchCondition.getGender())) {
-			sql += " and gender = ? ";
-			conditionList.add(studentSearchCondition.getGender());
-		}
-
-		sql += " limit ?,?";
-		int offset = (studentSearchCondition.getPageNo() - 1) * studentSearchCondition.getPageSize();
-		conditionList.add(offset);
-		conditionList.add(studentSearchCondition.getPageSize());
-		//2.占位符赋值
-		Object[] params = conditionList.toArray();
+		List<Student> list = new ArrayList<Student>();
+		List<String> conditionList = new ArrayList<String>();
 		try {
-			List<Student> list = queryRunner.query(sql, new BeanListHandler<Student>(Student.class), params);
-			return list;
+			connection = JDBCUtil.getConnection();
+			if (studentSearchCondition.getName() != null 
+					&& !"".equals(studentSearchCondition.getName())) {
+				sql += " and name like ? ";
+				conditionList.add("%" + studentSearchCondition.getName() + "%");
+			}
+			if (studentSearchCondition.getAge() != null 
+					&& !"".equals(studentSearchCondition.getAge())) {
+				sql += " and age = ? ";
+				conditionList.add(studentSearchCondition.getAge());
+			}
+			if (studentSearchCondition.getGender() != null 
+					&& !"".equals(studentSearchCondition.getGender())) {
+				sql += " and gender = ? ";
+				conditionList.add(studentSearchCondition.getGender());
+			}
+			
+			sql += " limit ?,?";
+			
+			//sql语句拼接好
+			preparedStatement = connection.prepareStatement(sql);
+			//给占位符?赋值
+			for (int i = 0; i < conditionList.size(); i++) {
+				preparedStatement.setObject(i + 1, conditionList.get(i));
+			}
+			
+			int offset = (studentSearchCondition.getPageNo() - 1) * studentSearchCondition.getPageSize();
+			preparedStatement.setInt(conditionList.size() + 1, offset);
+			preparedStatement.setInt(conditionList.size() + 2, studentSearchCondition.getPageSize());
+			
+			resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			while (resultSet.next()) {
+				Integer id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				Integer age = resultSet.getInt("age");
+				String address = resultSet.getString("address");
+				String gender = resultSet.getString("gender");
+				Date birthday = resultSet.getDate("birthday");// java.sql.Date
+				Student student = new Student(id, name, age, gender, address, birthday);
+				list.add(student);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(connection, preparedStatement, resultSet);
 		}
-		
-		return null;
+		return list;
+	
 	}
 }
