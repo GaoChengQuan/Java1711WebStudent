@@ -16,8 +16,6 @@ public class EncodingFilter implements Filter{
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -39,10 +37,7 @@ public class EncodingFilter implements Filter{
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-		
 	}
-
 }
 
 class EnhancedRequest extends HttpServletRequestWrapper {
@@ -65,7 +60,6 @@ class EnhancedRequest extends HttpServletRequestWrapper {
 		}
 		return parameter;
 	}
-	
 }
 
 

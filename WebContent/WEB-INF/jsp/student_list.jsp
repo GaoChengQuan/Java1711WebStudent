@@ -42,7 +42,7 @@
 		      </ul>
 		      
 		      <ul class="nav navbar-nav navbar-right">
-		        <li><a href="#"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;&nbsp;退出</a></li>
+		        <li><a href="${ctx}/login?method=logout">  <span>${user.name}</span> <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;&nbsp;退出</a></li>
 		      </ul>
 		    </div><!-- /.navbar-collapse -->
 		  </div><!-- /.container-fluid -->

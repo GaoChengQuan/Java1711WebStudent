@@ -8,34 +8,37 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.situ.student.entity.User;
+import com.situ.student.service.IUserService;
+import com.situ.student.service.impl.UserServiceImpl;
+
 /**
  * Servlet implementation class LoginServlet2
  */
-public class LoginServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//1.获取参数
-		String name = req.getParameter("name");
-		String password = req.getParameter("password");
-		//2.业务处理
-		if ("zhangsan".equals(name) && "123".equals(password)) {
-			//登录成功
-			//2.1创建Session对象
-			HttpSession session = req.getSession();
-			//2.2把数据保存到域对象中
-			session.setAttribute("userName", name);
-			//2.3跳转到列表页面
-			resp.sendRedirect(req.getContextPath() + "/findAll.do");
+public class LoginServlet extends BaseServlet {
+private IUserService userService = new UserServiceImpl();
+	
+	public void getLoginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/WEB-INF/jsp/user_login.jsp").forward(request, response);
+	}
+	
+	public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		User user = userService.login(name, password);
+		if (user != null) {//登录成功
+			HttpSession session = request.getSession();
+			session.setAttribute("user", user);
+			response.sendRedirect(request.getContextPath() + "/student?method=pageList");
+			return;
 		} else {
-			//登录失败
-			resp.sendRedirect(req.getContextPath() + "/jsp/fail.jsp");
+			response.sendRedirect(request.getContextPath() + "/user?method=getLoginPage");
 		}
 	}
 	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		this.doGet(req, resp);
+	public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		session.removeAttribute("user");
+		response.sendRedirect(request.getContextPath() + "/login?method=getLoginPage");
 	}
 }
