@@ -30,7 +30,7 @@ public class BaseServlet extends HttpServlet{
 		String servletPath = req.getServletPath();
 		System.out.println(servletPath);
 		//处理post请求乱码
-		req.setCharacterEncoding("UTF-8");
+		//req.setCharacterEncoding("UTF-8");
 		resp.setContentType("text/html;charset=utf-8");
 	
 		// /Java1711WebStudent/student?method=findAll

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="../common/base.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -55,14 +55,14 @@
 				<!-- 左边部分 end-->
 				<!-- 右边部分 begin-->
 				<div class="col-md-10">
-					<form>
+					<form action="${ctx}/add">
 					  <div class="form-group">
 					    <label for="exampleInputEmail1">Email address</label>
-					    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+					    <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="Email">
 					  </div>
 					  <div class="form-group">
 					    <label for="exampleInputPassword1">Password</label>
-					    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+					    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
 					  </div>
 					  <button type="submit" class="btn btn-primary">Submit</button>
 					</form>

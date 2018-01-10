@@ -9,18 +9,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
-  <!-- 全局错误处理页面配置 -->
   <error-page>
-  	<error-code>500</error-code>
-  	<location>/jsp/common/500.jsp</location>
+    <error-code>500</error-code>
+    <location>/jsp/common/500.jsp</location>
   </error-page>
   <error-page>
-  	<error-code>404</error-code>
-  	<location>/jsp/common/404.html</location>
+    <error-code>404</error-code>
+    <location>/jsp/common/404.html</location>
   </error-page>
-  
-  
   <servlet>
     <servlet-name>StudentServlet</servlet-name>
     <servlet-class>com.situ.student.controller.StudentMainServlet</servlet-class>
@@ -29,7 +25,6 @@
     <servlet-name>StudentServlet</servlet-name>
     <url-pattern>/student</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>BanjiServlet</servlet-name>
     <servlet-class>com.situ.student.controller.BanjiMainServlet</servlet-class>
@@ -38,13 +33,11 @@
     <servlet-name>BanjiServlet</servlet-name>
     <url-pattern>/banji</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>InitServlet</servlet-name>
     <servlet-class>com.situ.student.controller.InitServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
-  
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>com.situ.student.controller.LoginServlet</servlet-class>
@@ -53,5 +46,22 @@
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/login</url-pattern>
   </servlet-mapping>
-
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>com.situ.student.filter.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddServlet</display-name>
+    <servlet-name>AddServlet</servlet-name>
+    <servlet-class>com.situ.student.controller.AddServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddServlet</servlet-name>
+    <url-pattern>/add</url-pattern>
+  </servlet-mapping>
 </web-app>
