@@ -50,6 +50,8 @@ public class LoginFilter implements Filter{
 				resp.sendRedirect(req.getContextPath() + "/login?method=getLoginPage");
 				return;
 			}
+			
+			chain.doFilter(request, response);
 		}
 	}
 

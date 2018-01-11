@@ -5,13 +5,10 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.situ.student.entity.User;
-import com.situ.student.service.IUserService;
-import com.situ.student.service.impl.UserServiceImpl;
 
 public class UserMainServlet extends BaseServlet{
 	
-
+	public void getOnLinePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/WEB-INF/jsp/online_user_list.jsp").forward(request, response);
+	}
 }

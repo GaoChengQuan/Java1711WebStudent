@@ -1,7 +1,9 @@
 package com.situ.student.controller;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +31,12 @@ public class LoginServlet extends BaseServlet {
 		if (user != null) {//登录成功
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
+			
+			//从ServletContext中取出在线列表集合
+			List<User> list = (List<User>) getServletContext().getAttribute("onLineUserList");
+			list.add(user);
+			//getServletContext().setAttribute("onLineUserList", list);
+			
 			response.sendRedirect(request.getContextPath() + "/student?method=pageList");
 			return;
 		} else {
@@ -38,7 +46,13 @@ public class LoginServlet extends BaseServlet {
 	
 	public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		session.removeAttribute("user");
+		
+		//从ServletContext中取出在线列表集合
+		List<User> list = (List<User>) getServletContext().getAttribute("onLineUserList");
+		list.remove(user);
+		
 		response.sendRedirect(request.getContextPath() + "/login?method=getLoginPage");
 	}
 }

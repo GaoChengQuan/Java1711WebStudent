@@ -9,6 +9,12 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
+  <session-config>
+        <session-timeout>1</session-timeout>
+  </session-config>
+  
+  
   <error-page>
     <error-code>500</error-code>
     <location>/jsp/common/500.jsp</location>
@@ -80,4 +86,11 @@
     <filter-name>LoginFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  
+  <listener>
+  	<listener-class>com.situ.student.listener.OnLineUserListener</listener-class>
+  </listener>
+    <listener>
+  	<listener-class>com.situ.student.listener.MyHttpSessionListener</listener-class>
+  </listener>
 </web-app>
