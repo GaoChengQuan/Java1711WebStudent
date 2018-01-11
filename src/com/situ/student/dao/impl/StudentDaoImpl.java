@@ -362,6 +362,7 @@ public class StudentDaoImpl implements IStudentDao {
 		Object[] params = conditionList.toArray();
 		try {
 			List<Student> list = queryRunner.query(sql, new BeanListHandler<Student>(Student.class), params);
+			queryRunner.toString();
 			return list;
 		} catch (SQLException e) {
 			e.printStackTrace();

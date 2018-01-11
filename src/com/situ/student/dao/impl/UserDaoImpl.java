@@ -22,6 +22,7 @@ public class UserDaoImpl implements IUserDao {
 		User user = null;
 		try {
 			user = queryRunner.query(sql, new BeanHandler<User>(User.class), params);
+			queryRunner.toString();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

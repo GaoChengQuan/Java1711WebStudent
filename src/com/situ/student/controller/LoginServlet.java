@@ -16,7 +16,7 @@ import com.situ.student.service.impl.UserServiceImpl;
  * Servlet implementation class LoginServlet2
  */
 public class LoginServlet extends BaseServlet {
-private IUserService userService = new UserServiceImpl();
+	private IUserService userService = new UserServiceImpl();
 	
 	public void getLoginPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/jsp/user_login.jsp").forward(request, response);

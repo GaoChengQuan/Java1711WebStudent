@@ -18,8 +18,6 @@ public class LoginFilter implements Filter{
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -31,25 +29,37 @@ public class LoginFilter implements Filter{
 		// /Java1711WebStudent/login
 		System.out.println(uri);
 		String servletPath = req.getServletPath();
+		
+		int lastIndex = servletPath.lastIndexOf(".");
+		String extension = "";
+		if (lastIndex != -1) {
+			extension = servletPath.substring(lastIndex);
+		}
+		
 		//对于登录这个请求就不拦截，因为本身就是要登录
-		if (!"/login".equalsIgnoreCase(servletPath)) {
+		if ("/login".equals(servletPath) 
+				|| ".js".equalsIgnoreCase(extension)
+				|| ".css".equalsIgnoreCase(extension)) {//都是放行
+			chain.doFilter(request, response);
+		} else {//需要验证
 			//得到session对象
 			HttpSession session = req.getSession();
 			User user = (User) session.getAttribute("user");
 			if (user == null) {//沒有登录成功
-				req.getRequestDispatcher("WEB-INF/jsp/user_login.jsp").forward(request, response);
+				// req.getRequestDispatcher("WEB-INF/jsp/user_login.jsp").forward(request, response);
+				resp.sendRedirect(req.getContextPath() + "/login?method=getLoginPage");
 				return;
 			}
 		}
-		// 1、要去登录 /login 2、已经登录
-		//验证成功,放行（可以访问servlet）
-		chain.doFilter(request, response);
 	}
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-		
 	}
-
+	
+	public static void main(String[] args) {
+		String path = "/Java1711WebStudent/lib/jquery/jquery-1.11.1.js";
+		String extension = path.substring(path.lastIndexOf(".") + 1);
+		System.out.println(extension);
+	}
 }
