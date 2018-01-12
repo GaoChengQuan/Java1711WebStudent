@@ -7,6 +7,28 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/lib/bootstrap/css/bootstrap.min.css"/>
+<script type="text/javascript">
+$(function(){
+	$("#nameId").blur(function() {
+		var name = $(this).val();
+		$.post(
+			"${ctx}/student?method=checkName",//url
+			{"name":name}, //data
+			function(data) { // callback
+				//alert(data.isExist);
+			    if(data.isExist) {
+			    	$("#nameInfo").html("用户名已经存在");
+			        $("#nameInfo").css("color", "red");
+			    } else {
+			    	$("#nameInfo").html("此用户名可用");
+			        $("#nameInfo").css("color", "green");
+			    }
+			},
+			"json"
+		);
+	});
+});
+</script>
 	</head>
 	<body>
 		<!--导航 begin -->
@@ -58,7 +80,8 @@
 					<form action="${ctx}/add">
 					  <div class="form-group">
 					    <label for="exampleInputEmail1">Email address</label>
-					    <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="Email">
+					    <input type="text" id="nameId" name="name" class="form-control" id="exampleInputEmail1" placeholder="Email">
+					    <span id="nameInfo"></span>
 					  </div>
 					  <div class="form-group">
 					    <label for="exampleInputPassword1">Password</label>

@@ -33,4 +33,6 @@ public interface IStudentService {
 
 	PageBean getPageBean(int pageNo, int pageSize);
 
+	boolean checkName(String name);
+
 }

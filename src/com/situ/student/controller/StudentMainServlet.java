@@ -162,4 +162,11 @@ public class StudentMainServlet extends BaseServlet {
 		req.setAttribute("searchCondition", studentSearchCondition);
 		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);
 	}
+	
+	public void checkName(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String name = request.getParameter("name");
+		boolean isExist = studentService.checkName(name);
+		response.setContentType("text/html;charset=utf-8");
+		response.getWriter().write("{\"isExist\":"+isExist+"}");
+	}
 }

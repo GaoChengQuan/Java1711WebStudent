@@ -33,7 +33,8 @@ public class LoginServlet extends BaseServlet {
 			session.setAttribute("user", user);
 			
 			//从ServletContext中取出在线列表集合
-			List<User> list = (List<User>) getServletContext().getAttribute("onLineUserList");
+			List<User> list = (List<User>) getServletContext()
+					.getAttribute("onLineUserList");
 			list.add(user);
 			//getServletContext().setAttribute("onLineUserList", list);
 			

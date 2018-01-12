@@ -23,5 +23,4 @@ public class OnLineUserListener implements ServletContextListener{
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 	}
-
 }

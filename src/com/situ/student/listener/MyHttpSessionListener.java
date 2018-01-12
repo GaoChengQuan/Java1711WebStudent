@@ -26,5 +26,4 @@ public class MyHttpSessionListener implements HttpSessionListener {
 				.getAttribute("onLineUserList");
 		list.remove(user);
 	}
-
 }

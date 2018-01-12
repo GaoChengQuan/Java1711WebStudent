@@ -136,6 +136,11 @@ public PageBean searchByCondition(StudentSearchCondition studentSearchCondition)
 		
 		return pageBean;
 	}
+
+	@Override
+	public boolean checkName(String name) {
+		return studentDao.checkName(name);
+	}
 	
 	
 	
