@@ -38,6 +38,7 @@ public class LoginFilter implements Filter{
 		
 		//对于登录这个请求就不拦截，因为本身就是要登录
 		if ("/login".equals(servletPath) 
+				|| "/checkImg".equals(servletPath) 
 				|| ".js".equalsIgnoreCase(extension)
 				|| ".css".equalsIgnoreCase(extension)) {//都是放行
 			chain.doFilter(request, response);
@@ -45,11 +46,11 @@ public class LoginFilter implements Filter{
 			//得到session对象
 			HttpSession session = req.getSession();
 			User user = (User) session.getAttribute("user");
-			/*if (user == null) {//沒有登录成功
+			if (user == null) {//沒有登录成功
 				// req.getRequestDispatcher("WEB-INF/jsp/user_login.jsp").forward(request, response);
 				resp.sendRedirect(req.getContextPath() + "/login?method=getLoginPage");
 				return;
-			}*/
+			}
 			
 			chain.doFilter(request, response);
 		}

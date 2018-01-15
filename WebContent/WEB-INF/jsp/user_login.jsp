@@ -6,11 +6,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+	function refreshCode() {
+		$("#codeImage").attr("src", "${ctx}/checkImg?" + Math.random());
+	}
+</script>
 </head>
 <body>
 	<form action="${ctx}/login?method=login" method="post">
 		用户名：<input type="text" name="name"></br>
 		密码：<input type="text" name="password"></br>
+		验证码：<input type="text" name="checkCode"/>
+		<img id="codeImage" alt="" src="${ctx}/checkImg" onclick="refreshCode()"><br/>
 		<input type="submit" value="登录"/>
 	</form>
 </body>

@@ -384,9 +384,7 @@ public class StudentDaoImpl implements IStudentDao {
 				preparedStatement.addBatch();
 			}
 			int[] results = preparedStatement.executeBatch();
-			if (results.length == ids.length) {
-				return true;
-			}
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
