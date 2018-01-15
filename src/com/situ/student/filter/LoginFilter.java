@@ -45,11 +45,11 @@ public class LoginFilter implements Filter{
 			//得到session对象
 			HttpSession session = req.getSession();
 			User user = (User) session.getAttribute("user");
-			if (user == null) {//沒有登录成功
+			/*if (user == null) {//沒有登录成功
 				// req.getRequestDispatcher("WEB-INF/jsp/user_login.jsp").forward(request, response);
 				resp.sendRedirect(req.getContextPath() + "/login?method=getLoginPage");
 				return;
-			}
+			}*/
 			
 			chain.doFilter(request, response);
 		}

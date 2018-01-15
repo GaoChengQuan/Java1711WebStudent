@@ -35,4 +35,6 @@ public interface IStudentService {
 
 	boolean checkName(String name);
 
+	boolean deleteAll(String[] ids);
+
 }

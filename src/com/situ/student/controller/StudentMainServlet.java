@@ -2,6 +2,7 @@ package com.situ.student.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class StudentMainServlet extends BaseServlet {
 		} else {
 			System.out.println("更新失败");
 		}
-		resp.sendRedirect(req.getContextPath() + "/student?method=findAll");
+		resp.sendRedirect(req.getContextPath() + "/student?method=searchByCondition");
 	}
 
 	private void toUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,7 +57,7 @@ public class StudentMainServlet extends BaseServlet {
 		req.getRequestDispatcher("/jsp/student_edit.jsp").forward(req, resp);
 	}
 
-	private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	private void deleteById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String idStr = req.getParameter("id");
 		int id = Integer.parseInt(idStr);
 		boolean result = studentService.deleteById(id);
@@ -66,7 +67,7 @@ public class StudentMainServlet extends BaseServlet {
 			System.out.println("删除失败");
 		}
 		//resp.sendRedirect("/Java1711Web/findAll.do");
-		resp.sendRedirect(req.getContextPath() + "/student?method=findAll");
+		resp.sendRedirect(req.getContextPath() + "/student?method=searchByCondition");
 	}
 
 	private void findByName(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -102,41 +103,9 @@ public class StudentMainServlet extends BaseServlet {
 		printWriter.close();*/
 
 		//重定向是给浏览器看的，所以"/"代表的tomacat的目录
-		resp.sendRedirect(req.getContextPath() + "/student?method=findAll");
+		resp.sendRedirect(req.getContextPath() + "/student?method=searchByCondition");
 	}
 
-	private void findAll(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-		// 1.接收请求参数，封装成对象
-		// 2.调业务层处理
-		List<Student> list = studentService.findAll();
-		// 3.控制界面的跳转
-		req.setAttribute("list", list);
-		/*RequestDispatcher requestDispatcher = req.getRequestDispatcher("");
-		requestDispatcher.forward(req, resp);*/
-		//req.getRequestDispatcher("/showInfo.do").forward(req, resp);
-		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);
-	}
-	
-	private void pageList(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-		// 1.接收请求参数，封装成对象
-		String pageNoStr = req.getParameter("pageNo");
-		String pageSizeStr = req.getParameter("pageSize");
-		int pageNo = 1;//默认取第一页的数据
-		if (pageNoStr != null && !"".equals(pageNoStr)) {
-			pageNo = Integer.parseInt(pageNoStr);
-		}
-		int pageSize = 3;//默认每一页条数
-		if (pageSizeStr != null && !"".equals(pageSizeStr)) {
-			pageSize = Integer.parseInt(pageSizeStr);
-		}
-		// 2.调业务层处理
-		PageBean pageBean = studentService.getPageBean(pageNo, pageSize);
-		System.out.println(pageBean);
-		// 3.控制界面的跳转
-		req.setAttribute("pageBean", pageBean);
-		req.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp").forward(req, resp);
-	}
-	
 	private void searchByCondition(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("StudentMainServlet.searchByCondition()");
 		//1.接收并封装数据
@@ -146,7 +115,7 @@ public class StudentMainServlet extends BaseServlet {
 		if (pageNoStr != null && !"".equals(pageNoStr)) {
 			pageNo = Integer.parseInt(pageNoStr);
 		}
-		int pageSize = 3;//默认每一页条数
+		int pageSize = Constant.DEFAULT_PAGE_SIZE;;//默认每一页条数
 		if (pageSizeStr != null && !"".equals(pageSizeStr)) {
 			pageSize = Integer.parseInt(pageSizeStr);
 		}
@@ -169,4 +138,19 @@ public class StudentMainServlet extends BaseServlet {
 		response.setContentType("text/html;charset=utf-8");
 		response.getWriter().write("{\"isExist\":"+isExist+"}");
 	}
+	
+	public void deleteAll(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String[] ids = request.getParameterValues("selectIds");
+		for (String string : ids) {
+			System.out.println(string);
+		}
+		studentService.deleteAll(ids);
+		
+		response.sendRedirect(request.getContextPath() + "/student?method=searchByCondition");
+	}
+	
+	
+	
+	
+	
 }

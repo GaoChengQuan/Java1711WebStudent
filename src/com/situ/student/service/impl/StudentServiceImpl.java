@@ -141,15 +141,15 @@ public PageBean searchByCondition(StudentSearchCondition studentSearchCondition)
 	public boolean checkName(String name) {
 		return studentDao.checkName(name);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public boolean deleteAll(String[] ids) {
+		//在Service层可以for循环遍历调用sutdentDao.deleteById
+		/*for (String id : ids) {
+			studentDao.deleteById(Integer.parseInt(id));
+		}*/
+		
+		return studentDao.deleteAll(ids);
+	}
 
 }

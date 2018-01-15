@@ -370,4 +370,27 @@ public class StudentDaoImpl implements IStudentDao {
 		
 		return null;
 	}
+
+	@Override
+	public boolean deleteAll(String[] ids) {
+		try {
+			Connection connection = null;
+			PreparedStatement preparedStatement = null;
+			connection = JDBCUtil.getConnection();
+			String sql = "delete from student where id=?";
+			preparedStatement = connection.prepareStatement(sql);
+			for (String id : ids) {
+				preparedStatement.setInt(1, Integer.parseInt(id));
+				preparedStatement.addBatch();
+			}
+			int[] results = preparedStatement.executeBatch();
+			if (results.length == ids.length) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 }

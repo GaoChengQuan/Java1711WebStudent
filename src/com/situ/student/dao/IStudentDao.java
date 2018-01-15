@@ -46,4 +46,6 @@ public interface IStudentDao {
 	public abstract int getTotalCount(StudentSearchCondition studentSearchCondition);
 
 	public abstract List<Student> findPageBeanList(StudentSearchCondition studentSearchCondition);
+
+	public abstract boolean deleteAll(String[] ids);
 }

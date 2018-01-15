@@ -15,6 +15,18 @@
 				$("#pageNo").val(pageNo);
 				$("#searchForm").submit();
 			}
+			
+			function selectAll() {
+				$("input[name=selectIds]").prop("checked", $("#selectAlls").is(":checked"));
+			}
+			
+			function deleteAll() {
+				var isConfirmDelete = confirm("确认要删除么？");
+				if (isConfirmDelete) {
+					$("#mainForm").attr("action", "${ctx}/student?method=deleteAll");
+					$("#mainForm").submit();
+				}
+			}
 		</script>
 	</head>
 	<body>
@@ -77,33 +89,42 @@
 							  </select>
 						<input type="submit" value="搜索"/>
 					</form>
+					<button class="btn btn-primary" onclick="deleteAll()">批量删除</button>
 					<!-- 搜索表单end -->
-					<table class="table table-hover">
-				      <thead>
-				        <tr>
-				          <th>ID</th>
-				          <th>姓名</th>
-				          <th>年龄</th>
-				          <th>性别</th>
-				          <th>地址</th>
-				          <th>删除</th>
-				          <th>修改</th>
-				        </tr>
-				      </thead>
-				      <tbody>
-				      	<c:forEach items="${pageBean.list}" var="student">
+					<form action="" id="mainForm" method="post">
+						<table class="table table-hover">
+					      <thead>
 					        <tr>
-					          <td>${student.id}</td>
-					          <td>${student.name}</td>
-					          <td>${student.age}</td>
-					          <td>${student.gender}</td>
-					          <td>${student.address}</td>
-					          <td><a href="${ctx}/student?deleteById&id=${student.id}">删除</a></td>
-					          <td><a href="${ctx}/student?toUpdate&id=${student.id}">修改</a></td>
+					          <th>
+						         <input type="checkbox" id="selectAlls" onclick="selectAll()"/>
+						      </th>
+					          <th>ID</th>
+					          <th>姓名</th>
+					          <th>年龄</th>
+					          <th>性别</th>
+					          <th>地址</th>
+					          <th>删除</th>
+					          <th>修改</th>
 					        </tr>
-				      	</c:forEach>
-				      </tbody>
-				    </table>
+					      </thead>
+					      <tbody>
+					      	<c:forEach items="${pageBean.list}" var="student">
+						        <tr>
+						          <td>
+						          	<input type="checkbox" name="selectIds" value="${student.id}"/>
+						          </td>
+						          <td>${student.id}</td>
+						          <td>${student.name}</td>
+						          <td>${student.age}</td>
+						          <td>${student.gender}</td>
+						          <td>${student.address}</td>
+						          <td><a href="${ctx}/student?deleteById&id=${student.id}">删除</a></td>
+						          <td><a href="${ctx}/student?toUpdate&id=${student.id}">修改</a></td>
+						        </tr>
+					      	</c:forEach>
+					      </tbody>
+					    </table>
+					</form>
 				    <!-- 分页begin -->
 				    <nav aria-label="Page navigation">
 					  <ul class="pagination">
