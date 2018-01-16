@@ -77,49 +77,25 @@
 				<!-- 左边部分 end-->
 				<!-- 右边部分 begin-->
 				<div class="col-md-10">
-					<!-- 搜索表单begin -->
-					<form action="${ctx}/student?method=searchByCondition" method="post" id="searchForm">
-						<input type="hidden" name="pageNo" id="pageNo"><br/>
-						姓名：<input type="text" name="name" value="${searchCondition.name}"/>
-						年龄：<input type="text" name="age" value="${searchCondition.age}"/>
-						性别：<select id="gender" name="gender">
-							  	<option value="">不限</option>
-							  	<option value="男">男</option>
-							  	<option value="女">女</option>
-							  </select>
-						<input type="submit" value="搜索"/>
-					</form>
-					<button class="btn btn-primary" onclick="deleteAll()">批量删除</button>
-					<!-- 搜索表单end -->
 					<form action="" id="mainForm" method="post">
 						<table class="table table-hover">
 					      <thead>
 					        <tr>
-					          <th>
-						         <input type="checkbox" id="selectAlls" onclick="selectAll()"/>
-						      </th>
-					          <th>ID</th>
-					          <th>姓名</th>
-					          <th>年龄</th>
-					          <th>性别</th>
-					          <th>地址</th>
-					          <th>删除</th>
-					          <th>修改</th>
+					          <th>学生姓名</th>
+					          <th>学生年龄</th>
+					          <th>班级名称</th>
+					          <th>课程名称</th>
+					          <th>学分</th>
 					        </tr>
 					      </thead>
 					      <tbody>
-					      	<c:forEach items="${pageBean.list}" var="student">
-						        <tr>
-						          <td>
-						          	<input type="checkbox" name="selectIds" value="${student.id}"/>
-						          </td>
-						          <td>${student.id}</td>
-						          <td>${student.name}</td>
-						          <td>${student.age}</td>
-						          <td>${student.gender}</td>
-						          <td>${student.address}</td>
-						          <td><a href="${ctx}/student?deleteById&id=${student.id}">删除</a></td>
-						          <td><a href="${ctx}/student?toUpdate&id=${student.id}">修改</a></td>
+					      	<c:forEach items="${list}" var="map">
+					      	  	<tr>
+						          <td>${map['s_name']}</td>
+						          <td>${map['age']}</td>
+						          <td>${map['b_name']}</td>
+						          <td>${map['c_name']}</td>
+						          <td>${map['credit']}</td>
 						        </tr>
 					      	</c:forEach>
 					      </tbody>

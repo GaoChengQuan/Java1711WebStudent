@@ -39,6 +39,17 @@
     <servlet-name>StudentServlet</servlet-name>
     <url-pattern>/student</url-pattern>
   </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>ManagerServlet</servlet-name>
+    <servlet-class>com.situ.student.controller.ManagerMainServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManagerServlet</servlet-name>
+    <url-pattern>/manager</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>BanjiServlet</servlet-name>
     <servlet-class>com.situ.student.controller.BanjiMainServlet</servlet-class>
