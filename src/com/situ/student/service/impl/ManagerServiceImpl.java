@@ -12,7 +12,7 @@ public class ManagerServiceImpl implements IManagerService {
 	
 	@Override
 	public List<Map<String, Object>> findAll() {
-		return managerDao.findAll();
+		return managerDao.findAllByJdbc();
 	}
 
 }

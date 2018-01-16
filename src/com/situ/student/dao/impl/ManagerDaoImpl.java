@@ -10,14 +10,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapListHandler;
+
 import com.situ.student.dao.IManagerDao;
 import com.situ.student.entity.Student;
+import com.situ.student.util.C3P0Util;
 import com.situ.student.util.JDBCUtil;
+import com.situ.student.util.ModelConvert;
 
 public class ManagerDaoImpl implements IManagerDao {
-
+	private QueryRunner queryRunner = new QueryRunner(C3P0Util.getDataSource());
+	
 	@Override
-	public List<Map<String, Object>> findAll() {
+	public List<Map<String, Object>> findAllByJdbc() {
+		System.out.println("ManagerDaoImpl.findAllByJdbc()");
 		Connection connection  = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -32,45 +39,26 @@ public class ManagerDaoImpl implements IManagerDao {
 			preparedStatement = connection.prepareStatement(sql);
 			System.out.println(preparedStatement.toString());
 			resultSet = preparedStatement.executeQuery();
-			list = converList(resultSet);
+			list = ModelConvert.converList(resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
-
-	/**
-	 * 用于将rs查询结果封装为List<Map<String, Object>>对象
-	 * Map<String, Object>对应结果集里面的一行记录
-	 * 这一行数据包含多个<列名，值>
-	 * @param resultSet
-	 * @return
-	 */
-	private List<Map<String, Object>> converList(ResultSet resultSet) {
-		//新建一个map list用于存放多条查询记录
+	
+	@Override
+	public List<Map<String, Object>> findAllByDBUtils() {
+		System.out.println("ManagerDaoImpl.findAllByDBUtils()");
+		String sql = "SELECT s.name  AS s_name,age,b.name AS b_name,c.name AS c_name,c.credit "
+				+ "FROM student AS s INNER JOIN banji AS b ON s.banji_id=b.id "
+				+ "INNER JOIN banji_course AS bc ON b.id=bc.banji_id "
+				+ "INNER JOIN course AS c ON bc.course_id=c.id;";
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
-			ResultSetMetaData metaData = resultSet.getMetaData();//结果集(ResultSet)结构信息，比如字段数，字段名
-			int columnCount = metaData.getColumnCount();//返回字段的个数
-			while (resultSet.next()) {//迭代ResultSet
-				Map<String, Object> map = new HashMap<String, Object>();
-				for (int i = 1; i <= columnCount; i++) {//循环所有查询出来字段
-					map.put(metaData.getColumnLabel(i), resultSet.getObject(i));
-					//metaData.getColumnLabel(i) 得到别名
-					//metaData.getColumnName(i) 数据库字段名
-				}
-				list.add(map);//将封装好的一行记录放到list里面
-			}
+			list = queryRunner.query(sql, new MapListHandler());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
-	
-	
-	
-	
-	
-	
-
 }
