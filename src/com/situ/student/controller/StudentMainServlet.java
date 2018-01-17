@@ -2,7 +2,9 @@ package com.situ.student.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.KeyStore.PrivateKeyEntry;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +27,16 @@ import com.situ.student.vo.StudentSearchCondition;
 
 public class StudentMainServlet extends BaseServlet {
 	private IStudentService studentService = new StudentServiceImpl();
+	//private IBanjiService banjiService = new BanjiServiceImpl();
 	
 	private void getStudentAdd(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		//List<Banji> list = banjiService.findAll();
+		List<Banji> list = new ArrayList<Banji>();
+		Banji banji1 = new Banji(1, "java1707");
+		list.add(banji1);
+		Banji banji2 = new Banji(2, "java1711");
+		list.add(banji2);
+		req.setAttribute("list", list);
 		req.getRequestDispatcher("/WEB-INF/jsp/student_add.jsp").forward(req, resp);
 	}
 
@@ -86,7 +96,12 @@ public class StudentMainServlet extends BaseServlet {
 		String age = req.getParameter("age");
 		String gender = req.getParameter("gender");
 		String address = req.getParameter("address");
+		String banjiId = req.getParameter("banjiId");
+		System.out.println(banjiId);
+		Banji banji = new Banji();
+		banji.setId(Integer.parseInt(banjiId));
 		Student student = new Student(name, Integer.parseInt(age), gender, address, new Date(), new Date());
+		student.setBanji(banji);
 		System.out.println(student);
 		// 2.业务处理
 		int result = studentService.add(student);

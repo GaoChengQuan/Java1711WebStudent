@@ -26,9 +26,9 @@ public class StudentDaoImpl implements IStudentDao {
 	public int add(Student student) {
 		int count = 0;
 		try {
-			String sql = "INSERT INTO student(NAME,age,gender,address,birthday) VALUES(?,?,?,?,?);";
+			String sql = "INSERT INTO student(NAME,age,gender,address,birthday,banji_id) VALUES(?,?,?,?,?,?);";
 			Object[] params = { student.getName(), student.getAge(), student.getGender(), student.getAddress(),
-					student.getBirthday() };
+					student.getBirthday(), student.getBanji().getId()};
 			count = queryRunner.update(sql, params);
 		} catch (SQLException e) {
 			e.printStackTrace();

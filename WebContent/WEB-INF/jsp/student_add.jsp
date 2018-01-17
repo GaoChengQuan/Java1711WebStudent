@@ -77,16 +77,21 @@ $(function(){
 				<!-- 左边部分 end-->
 				<!-- 右边部分 begin-->
 				<div class="col-md-10">
-					<form action="${ctx}/add">
+					<form action="${ctx}/student?method=add" method="post">
 					  <div class="form-group">
-					    <label for="exampleInputEmail1">Email address</label>
+					    <label for="exampleInputEmail1">名字</label>
 					    <input type="text" id="nameId" name="name" class="form-control" id="exampleInputEmail1" placeholder="Email">
 					    <span id="nameInfo"></span>
 					  </div>
 					  <div class="form-group">
-					    <label for="exampleInputPassword1">Password</label>
-					    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+					    <label for="exampleInputPassword1">年龄</label>
+					    <input type="text" name="age" class="form-control" id="exampleInputPassword1" placeholder="Password">
 					  </div>
+					  <select name="banjiId">
+					  	<c:forEach items="${list}" var="banji">
+						  	<option value="${banji.id}">${banji.name}</option>
+					  	</c:forEach>
+					  </select><br/>
 					  <button type="submit" class="btn btn-primary">Submit</button>
 					</form>
 				</div>
